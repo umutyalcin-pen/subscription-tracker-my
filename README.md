@@ -1,4 +1,4 @@
-# E-Posta İçeriklerinizi Düzenlemek İçin Basit Bir Google Chrome Eklentisi
+# Aboneliklerinizi takip etmek için bir uygulama
 
 <p align="left"> 
     <a href="https://www.instagram.com/umutyalcine?igsh=c21xZ2psNG56cHN5" target="_blank">
