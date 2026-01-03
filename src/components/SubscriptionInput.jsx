@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useSubscriptions, CURRENCIES } from '../context/SubscriptionContext';
 import * as Icons from 'lucide-react';
 
-// Popüler abonelik ikonları
 const ICONS = [
     { name: 'Box', label: 'Kutu' },
     { name: 'Video', label: 'Video' },
@@ -22,18 +21,16 @@ const ICONS = [
 ];
 
 const COLORS = [
-    '#ef4444', // Red
-    '#FB923C', // Orange
-    '#eab308', // Yellow
-    '#22c55e', // Green
-    '#06b6d4', // Cyan
-    '#3b82f6', // Blue
-    '#6366f1', // Indigo
-    '#d946ef', // Fuchsia
-    '#1e293b', // Slate
+    '#ef4444', 
+    '#FB923C', 
+    '#eab308', 
+    '#22c55e', 
+    '#06b6d4', 
+    '#3b82f6', 
+    '#6366f1', 
+    '#d946ef', 
+    '#1e293b', 
 ];
-
-
 
 const SubscriptionInput = () => {
     const { addSubscription, displayCurrency } = useSubscriptions();
@@ -50,7 +47,6 @@ const SubscriptionInput = () => {
 
     const [dateError, setDateError] = useState('');
 
-    // Tarih doğrulama
     const validateDates = () => {
         if (formData.startDate && formData.endDate) {
             if (new Date(formData.startDate) > new Date(formData.endDate)) {
