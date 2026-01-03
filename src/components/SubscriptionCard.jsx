@@ -5,26 +5,22 @@ import { useSubscriptions, CURRENCIES } from '../context/SubscriptionContext';
 const SubscriptionCard = ({ sub, total }) => {
     const { currency, displayCurrency, removeSubscription, convertCurrency } = useSubscriptions();
 
-    // Fiyatı görüntüleme para birimine dönüştür
     const convertedPrice = convertCurrency(sub.price, sub.currency || 'TRY', displayCurrency);
     const originalDisplay = sub.isYearly ? sub.originalPrice : sub.price;
     const convertedOriginal = convertCurrency(originalDisplay, sub.currency || 'TRY', displayCurrency);
 
-    // Yüzde hesaplaması dönüştürülmüş fiyatla yapılmalı
     const percentage = total > 0 ? ((convertedPrice / total) * 100).toFixed(0) : 0;
 
-    // Dynamic icon component
     const IconComponent = Icons[sub.icon] || Icons.Box;
 
-    // Calculate size class or style based on percentage
     const isLarge = percentage > 15;
     const isMedium = percentage > 8;
 
     const style = {
-        backgroundColor: sub.color + '20', // Add transparency for pastel feel
+        backgroundColor: sub.color + '20',
         color: '#1e293b',
         borderColor: sub.color + '40',
-        position: 'relative' // For absolute positioning of delete button if needed, though flex is used
+        position: 'relative'
     };
 
     return (
