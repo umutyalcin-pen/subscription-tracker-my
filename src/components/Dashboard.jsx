@@ -12,7 +12,7 @@ const Dashboard = () => {
         addSubscription, exchangeRates, ratesLoading, ratesError, lastUpdate, fetchExchangeRates
     } = useSubscriptions();
 
-    // Son güncelleme zamanını formatla
+    
     const formatLastUpdate = (isoString) => {
         if (!isoString) return 'Hiç';
         const date = new Date(isoString);
@@ -65,9 +65,9 @@ const Dashboard = () => {
             header: true,
             skipEmptyLines: true,
             complete: (results) => {
-                // Simple heuristic: look for name/description and price/amount columns
+                
                 results.data.forEach(row => {
-                    // Normalize keys to lowercase for matching
+                
                     const normalizedRow = {};
                     Object.keys(row).forEach(key => {
                         normalizedRow[key.toLowerCase()] = row[key];
@@ -77,14 +77,14 @@ const Dashboard = () => {
                     const priceStr = normalizedRow.price || normalizedRow.amount || normalizedRow.cost || normalizedRow['tutar'];
 
                     if (name && priceStr) {
-                        // Clean price string (remove currency symbols)
+                      
                         const price = parseFloat(priceStr.toString().replace(/[^0-9.-]+/g, ""));
 
                         if (!isNaN(price) && price > 0) {
                             addSubscription({
                                 name: name,
                                 price: price,
-                                color: '#6366f1', // Default color, user can change later
+                                color: '#6366f1',
                                 icon: 'box'
                             });
                         }
@@ -92,7 +92,7 @@ const Dashboard = () => {
                 });
             }
         });
-        // Reset input
+     
         event.target.value = null;
     };
 
@@ -192,3 +192,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
