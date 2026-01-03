@@ -18,7 +18,6 @@ import {
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-// Sürüklenebilir kart wrapper'ı
 const SortableCard = ({ sub, total }) => {
     const {
         attributes,
@@ -49,7 +48,7 @@ const Treemap = () => {
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 8, // 8px hareket edildikten sonra sürükleme başlar
+                distance: 8,
             },
         }),
         useSensor(KeyboardSensor, {
