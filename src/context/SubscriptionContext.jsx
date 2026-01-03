@@ -2,14 +2,12 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const SubscriptionContext = createContext();
 
-// Para birimi sembolleri ve kodları
 export const CURRENCIES = {
     TRY: { symbol: '₺', name: 'Türk Lirası', code: 'TRY' },
     USD: { symbol: '$', name: 'ABD Doları', code: 'USD' },
     EUR: { symbol: '€', name: 'Euro', code: 'EUR' }
 };
 
-// Varsayılan dönüşüm oranları (API hatası durumunda kullanılır)
 const DEFAULT_RATES = {
     TRY: 1,
     USD: 0.028,
@@ -45,7 +43,6 @@ export const SubscriptionProvider = ({ children }) => {
         return localStorage.getItem('displayCurrency') || 'TRY';
     });
 
-    // Canlı döviz kurları state'leri
     const [exchangeRates, setExchangeRates] = useState(() => {
         const cached = localStorage.getItem('exchangeRates');
         return cached ? JSON.parse(cached) : DEFAULT_RATES;
@@ -58,13 +55,11 @@ export const SubscriptionProvider = ({ children }) => {
 
     const currency = CURRENCIES[displayCurrency]?.symbol || '₺';
 
-    // Döviz kurlarını API'den çek
     const fetchExchangeRates = useCallback(async () => {
         setRatesLoading(true);
         setRatesError(null);
 
         try {
-            // fawazahmed0/exchange-api kullanarak TRY bazlı kurları çek
             const response = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/try.json');
 
             if (!response.ok) {
@@ -73,7 +68,6 @@ export const SubscriptionProvider = ({ children }) => {
 
             const data = await response.json();
 
-            // TRY bazlı kurları al (1 TRY = ? USD/EUR)
             const rates = {
                 TRY: 1,
                 USD: data.try?.usd || DEFAULT_RATES.USD,
@@ -84,7 +78,6 @@ export const SubscriptionProvider = ({ children }) => {
             const now = new Date().toISOString();
             setLastUpdate(now);
 
-            // LocalStorage'a kaydet
             localStorage.setItem('exchangeRates', JSON.stringify(rates));
             localStorage.setItem('ratesLastUpdate', now);
 
@@ -96,7 +89,6 @@ export const SubscriptionProvider = ({ children }) => {
         }
     }, []);
 
-    // İlk yüklemede ve her 1 saatte kurları güncelle
     useEffect(() => {
         const lastUpdateTime = lastUpdate ? new Date(lastUpdate).getTime() : 0;
         const oneHour = 60 * 60 * 1000;
@@ -105,15 +97,12 @@ export const SubscriptionProvider = ({ children }) => {
             fetchExchangeRates();
         }
 
-        // Her 1 saatte bir güncelle
         const interval = setInterval(fetchExchangeRates, oneHour);
         return () => clearInterval(interval);
     }, [fetchExchangeRates, lastUpdate]);
 
-    // Para birimi dönüştürme fonksiyonu
     const convertCurrency = useCallback((amount, fromCurrency, toCurrency) => {
         if (fromCurrency === toCurrency) return amount;
-        // Önce TRY'ye çevir, sonra hedef para birimine
         const inTRY = amount / (exchangeRates[fromCurrency] || 1);
         return inTRY * (exchangeRates[toCurrency] || 1);
     }, [exchangeRates]);
@@ -134,12 +123,10 @@ export const SubscriptionProvider = ({ children }) => {
         setSubscriptions(prev => prev.filter(sub => sub.id !== id));
     };
 
-    // Sürükle-bırak sıralama için
     const reorderSubscriptions = (newOrder) => {
         setSubscriptions(newOrder);
     };
 
-    // Tüm abonelikleri görüntüleme para birimine dönüştürüp topla
     const totalMonthly = subscriptions.reduce((acc, sub) => {
         const converted = convertCurrency(Number(sub.price), sub.currency || 'TRY', displayCurrency);
         return acc + converted;
